@@ -1,0 +1,3 @@
+[submodule "knight"]
+	path = knight
+	url = https://github.com/songweihang/knight.git
