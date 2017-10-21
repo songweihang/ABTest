@@ -1,15 +1,17 @@
 # ABTest
-基于[openresty](https://openresty.org) 开发的高性能灰度测试以及动态调整upstream实现后端服务器伸缩的系统
+基于[openresty](https://openresty.org) 开发的高性能灰度测试系统，以及支持动态调整upstream可以实现动态伸缩
 
 1、可以通过用户IP或者UID进行设置Nginx灰度分流到指定的upstream服务器
 
-2、实时动态调整upstream实现后端服务器伸缩并且实现后端服务器按照权重轮训
+2、通过API动态调整upstream实现后端服务器伸缩
 
-3、所有操作通过HTTP API 进行动态操作，无需重启Nginx
+3、所有操作通过HTTP API 进行动态操作无需重启Nginx
 
-4、基于redis为数据库实现集群扩展数据共享
+4、基于redis为数据库实现集群数据共享
 
-5、高容错率，即使redis挂掉也可以使用默认upstream
+5、高容错率，即使redis挂掉系统会启动默认upstream
+
+6、实现类似Nginx(weight)权重分流
 
 ### 说明
 该项目非常感谢新浪 [ABTestingGateway](https://github.com/CNSRE/ABTestingGateway) 提供的开源代码,本项目中大量采用ABTestingGateway的设计思路，而本项目不同点在于，本项目是基于ngx.balancer实现动态分流，并且可以通过API动态调整upstream的转发ip以及端口亦可作为后端服务伸缩系统，而且可以支持到openresty-1.9.7.5以上版本，但是灰度发布只支持IP或UID分流
