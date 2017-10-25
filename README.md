@@ -51,6 +51,11 @@
         #设置默认转发集群weight值越大转发概率越高，在没有通过API设置以及redis挂掉都会采用如下转发规则
         set $default_upstream '[{"ip": "127.0.0.1","port": 8081,"weight":10},{"ip": "127.0.0.1","port": 8082,"weight":5}]';
         location / {
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header Connection "";
+            proxy_http_version 1.1;
             proxy_pass http://backend;
         }
     }
