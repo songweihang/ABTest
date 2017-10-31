@@ -19,21 +19,21 @@
 ### 安装
 如下是nginx.conf的最小配置 实际knight放路径可以根据实际情况进行调整
 
-    lua_package_path "/home/wwwroot/servers/knight/?.lua;;";
+    lua_package_path "/path/knight/?.lua;;";
     lua_code_cache on;
     lua_check_client_abort on;
     
     lua_max_pending_timers 1024;
     lua_max_running_timers 256;
-    include /home/wwwroot/servers/knight/config/lua.shared.dict;
+    include /path/knight/config/lua.shared.dict;
 
     upstream backend {
         server 0.0.0.1;   # just an invalid address as a place holder
-        balancer_by_lua_file /home/wwwroot/servers/knight/apps/by_lua/balancer.lua;
+        balancer_by_lua_file /path/knight/apps/by_lua/balancer.lua;
         keepalive 500;  # connection pool
     }  
 
-    init_by_lua_file /home/wwwroot/servers/knight/apps/by_lua/init.lua;
+    init_by_lua_file /path/knight/apps/by_lua/init.lua;
     
     server
     {
@@ -42,7 +42,7 @@
         
         location ~ ^/admin/([-_a-zA-Z0-9/]+) {
             set $path $1;
-            content_by_lua_file '/home/wwwroot/servers/knight/admin/$path.lua'; 
+            content_by_lua_file '/path/knight/admin/$path.lua'; 
         }
     }
 
@@ -50,7 +50,8 @@
     {
         server_name domain.host.cn;
         index index.html index.htm;
-        #设置默认转发集群weight值越大转发概率越高，在没有通过API设置以及redis挂掉都会采用如下转发规则
+        #设置默认转发集群weight值越大转发概率越高，在没有通过API设置或者极端情况redis挂掉都会采用如下转发规则
+        #weight值设置大于1小于10
         set $default_upstream '[{"ip": "127.0.0.1","port": 8081,"weight":10},{"ip": "127.0.0.1","port": 8082,"weight":5}]';
         location / {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -88,7 +89,7 @@ knight/config/init.lua 服务配置说明
 
 
 ### API使用
-[abtest-doc](https://github.com/songweihang/knight/blob/master/apps/lib/abtest/abtest-doc.txt)
+[ABTest-DOC](https://github.com/songweihang/knight/blob/master/apps/lib/abtest/abtest-doc.txt)
 
 ### License
 
