@@ -33,6 +33,8 @@
         keepalive 500;  # connection pool
     }  
 
+    init_by_lua_file /home/wwwroot/servers/knight/apps/by_lua/init.lua;
+    
     server
     {
         server_name api.host.cn;
